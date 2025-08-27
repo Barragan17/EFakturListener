@@ -1,5 +1,7 @@
 using EFakturCallback;
 using Microsoft.AspNetCore.Mvc;
+using EFakturCallback.Data.Repositories.Interfaces;
+using EFakturCallback.Data.Entities;
 
 namespace EFakturCallback.Controllers;
 
