@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Events;
 using EFakturCallback.Factories;
 using EFakturCallback.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +61,19 @@ builder.Services.AddScoped<IEfakturListenerRepository, EFakturListenerRepository
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+app.UsePathBase("/api/kala");
+app.UseRouting();
+
+app.MapHealthChecks("/hc");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -72,6 +85,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseEndpoints(options =>
+{
+    app.MapControllers();
+    app.MapDefaultControllerRoute();
+});
 
 app.MapControllers();
 
