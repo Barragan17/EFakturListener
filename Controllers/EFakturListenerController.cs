@@ -2,6 +2,8 @@ using EFakturCallback;
 using Microsoft.AspNetCore.Mvc;
 using EFakturCallback.Data.Repositories.Interfaces;
 using EFakturCallback.Data.Entities;
+using System.Text.Json;
+using Serilog;
 
 namespace EFakturCallback.Controllers;
 
@@ -19,8 +21,19 @@ public class EFakturListenerController : SecureController
     }
 
     [HttpPost]
-    public async Task<IActionResult> EFakturListener(FakturDetailStream message)
+    public async Task<IActionResult> EFakturListener([FromBody] FakturDetailStream message)
     {
-        return Response();
+        try
+        {
+            Log.Information($"Payload: {JsonSerializer.Serialize(message)}");
+            await repository.EFakturListener(message);
+            return Response();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            AddError(ex.Message, ex.Message, ex.Message);
+            return Response();
+        }
     }
 }
