@@ -8,6 +8,7 @@ using EFakturCallback.Attributes;
 namespace EFakturCallback
 {
     [ETagFilter(200)]
+    [ApiKey]
     public class SecureController : ControllerBase
     {
         private readonly ICollection<object> _errors = new List<object>();
