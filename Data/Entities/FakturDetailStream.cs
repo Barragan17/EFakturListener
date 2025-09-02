@@ -1,10 +1,19 @@
+using Newtonsoft.Json;
+
 namespace EFakturCallback.Data.Entities
 {
     public class FakturDetailStream
 {
-    public string? NoFakturDummy { get; set; } 
-    public string? NoFakturCoretax { get; set; }
-    public string? Company { get; set; }
-    public string? Referensi { get; set; }
+    [JsonProperty("no_faktur_dummy")]
+    public string? no_faktur_dummy { get; set; }
+
+    [JsonProperty("no_faktur_coretax")]
+    public string? no_faktur_coretax { get; set; }
+
+    [JsonProperty("company")]
+    public string? company { get; set; }
+
+    [JsonProperty("referensi")]
+    public string? referensi { get; set; }
 }
 }
